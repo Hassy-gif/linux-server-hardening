@@ -1,0 +1,7 @@
+# Verified false positives (see evidence/rkhunter-warnings.txt)
+SCRIPTWHITELIST=/usr/bin/lwp-request
+ALLOWHIDDENFILE=/etc/.updated
+ALLOWHIDDENFILE=/etc/.resolv.conf.systemd-resolved.bak
+# PermitRootLogin is "no" in /etc/ssh/sshd_config.d/01-hardening.conf (verified with sshd -T).
+# rkhunter only reads the main sshd_config, so this check is suppressed.
+ALLOW_SSH_ROOT_USER=unset

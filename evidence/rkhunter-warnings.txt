@@ -1,0 +1,5 @@
+Warning: The command '/usr/bin/lwp-request' has been replaced by a script: /usr/bin/lwp-request: Perl script text executable
+Warning: The SSH configuration option 'PermitRootLogin' has not been set.
+         The default value may be 'yes', to allow root access.
+Warning: Hidden file found: /etc/.resolv.conf.systemd-resolved.bak: ASCII text
+Warning: Hidden file found: /etc/.updated: ASCII text
