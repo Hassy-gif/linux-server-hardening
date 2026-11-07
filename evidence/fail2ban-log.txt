@@ -1,0 +1,21 @@
+Nov 07 01:56:22 ubuntu-lab systemd[1]: Started fail2ban.service - Fail2Ban Service.
+Nov 07 01:56:22 ubuntu-lab fail2ban-server[101084]: Server ready
+Nov 07 01:56:24 ubuntu-lab systemd[1]: Stopping fail2ban.service - Fail2Ban Service...
+Nov 07 01:56:24 ubuntu-lab fail2ban-client[101617]: Shutdown successful
+Nov 07 01:56:24 ubuntu-lab systemd[1]: fail2ban.service: Deactivated successfully.
+Nov 07 01:56:24 ubuntu-lab systemd[1]: Stopped fail2ban.service - Fail2Ban Service.
+Nov 07 01:56:24 ubuntu-lab systemd[1]: fail2ban.service: Consumed 145ms CPU time over 2.128s wall clock time, 64M memory peak.
+Nov 07 01:56:24 ubuntu-lab systemd[1]: Started fail2ban.service - Fail2Ban Service.
+Nov 07 01:56:24 ubuntu-lab fail2ban-server[101621]: Server ready
+Nov 07 02:00:15 ubuntu-lab systemd[1]: Stopping fail2ban.service - Fail2Ban Service...
+Nov 07 02:00:16 ubuntu-lab fail2ban-client[101728]: Shutdown successful
+Nov 07 02:00:16 ubuntu-lab systemd[1]: fail2ban.service: Deactivated successfully.
+Nov 07 02:00:16 ubuntu-lab systemd[1]: Stopped fail2ban.service - Fail2Ban Service.
+Nov 07 02:00:16 ubuntu-lab systemd[1]: Started fail2ban.service - Fail2Ban Service.
+Nov 07 02:00:16 ubuntu-lab fail2ban-server[101732]: Server ready
+Nov 07 02:01:56 ubuntu-lab systemd[1]: Stopping fail2ban.service - Fail2Ban Service...
+Nov 07 02:01:57 ubuntu-lab fail2ban-client[101795]: Shutdown successful
+Nov 07 02:01:57 ubuntu-lab systemd[1]: fail2ban.service: Deactivated successfully.
+Nov 07 02:01:57 ubuntu-lab systemd[1]: Stopped fail2ban.service - Fail2Ban Service.
+Nov 07 02:01:57 ubuntu-lab systemd[1]: Started fail2ban.service - Fail2Ban Service.
+Nov 07 02:01:57 ubuntu-lab fail2ban-server[101799]: Server ready

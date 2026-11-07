@@ -1,0 +1,8 @@
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] Anywhere                   REJECT IN   10.0.2.3                   # by Fail2Ban after 3 attempts against sshd
+[ 2] OpenSSH                    ALLOW IN    Anywhere                  
+[ 3] OpenSSH (v6)               ALLOW IN    Anywhere (v6)             
+
