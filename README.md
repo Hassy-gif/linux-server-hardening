@@ -27,6 +27,9 @@ Lynis hardening score went from 63 to 72.
 ## Testing it from Kali
 
 I tried logging in as a user that doesn't exist, over and over. The first couple of tries got `Permission denied`. After that fail2ban banned Kali and the next attempts got `Connection refused`, so the firewall was dropping it completely. The ban output and logs are in `evidence/`.
+![fail2ban banning Kali](fail2ban-ban.png)
+
+![Firewall rule blocking Kali](firewall-ban.png)
 
 ## Problems I ran into
 
