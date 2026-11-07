@@ -1,0 +1,4 @@
+maxauthtries 3
+permitrootlogin no
+passwordauthentication no
+allowusers asana
