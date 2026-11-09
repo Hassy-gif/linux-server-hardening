@@ -1,51 +1,56 @@
-# Linux server hardening lab
+# Linux Server Hardening Lab
 
-I wanted to learn how to actually secure a Linux server instead of just reading about it, so I set up a small lab: an Ubuntu VM as the server and a Kali VM to attack it. I measured how secure Ubuntu was out of the box, hardened it, then tried to break in from Kali to see if my changes held up.
+I'm a Computer and Information Systems student and I'm interested in cybersecurity. I wanted to learn how to protect a Linux server by doing it myself, not just reading about it. So I built a small lab with two virtual machines. Ubuntu was the server I protected, and Kali Linux was the machine I used to attack it.
 
-Lynis hardening score went from 63 to 72.
+First I checked how secure Ubuntu was before I changed anything. Then I made it more secure and tried to break in from Kali to see if my changes worked.
 
-## Setup
+The security score from Lynis went from 63 to 72.
 
-- MacBook Air (Apple Silicon) running VirtualBox
-- Ubuntu 26.04.1 LTS (ARM64) at 10.0.2.15, the server
-- Kali Linux (ARM64) at 10.0.2.3, the "attacker"
-- Both on an isolated NAT network so nothing leaves the lab
-- I SSH into Ubuntu from my Mac through a port forward that only listens on 127.0.0.1
+## My lab
+
+- MacBook Air running VirtualBox
+- Ubuntu 26.04.1 at 10.0.2.15 (the server)
+- Kali Linux at 10.0.2.3 (the attacker)
+- Both machines are on their own private network, so nothing leaves the lab
+- I connect to Ubuntu from my Mac with SSH
 
 ## What I did
 
-**Baseline.** Ran `lynis audit system` on a fresh install. Score was 63. It flagged that there was no firewall, no intrusion prevention and no malware scanner. The original report is in `before-lynis-report.dat`.
+**1. Checked the starting point.** I ran a tool called Lynis. It gave the server a score of 63 and said there was no firewall, no protection against login attacks, and no malware scanner.
 
-**Firewall.** Turned on UFW with default deny for incoming traffic and only allowed SSH.
+**2. Turned on the firewall.** I used UFW to block all incoming connections except SSH.
 
-**SSH.** Set up key-based login from Kali and my Mac, then turned off password login completely. Also disabled root login, limited SSH to my user, and cut the number of login attempts to 3. My config is in `configs/01-hardening.conf`. To check it worked, I forced a password login from Kali and got `Permission denied (publickey)` with no password prompt.
+**3. Made SSH safer.** I set up SSH keys for Kali and my Mac, then turned off password logins completely. I also blocked the root account from logging in, allowed only my user, and limited login attempts to 3. To test it, I tried to log in with a password from Kali and got "Permission denied (publickey)".
 
-**fail2ban.** 3 failed logins in 10 minutes gets an IP banned for an hour through UFW. My Mac's address is whitelisted so I can't lock myself out.
+**4. Added fail2ban.** If someone fails to log in 3 times in 10 minutes, fail2ban blocks their IP address for 1 hour. My Mac is on an allow list so I can't lock myself out.
 
-**rkhunter.** Rootkit scanner that runs daily. The first scan gave 4 warnings. I checked each one before whitelisting it (notes in `evidence/rkhunter-triage.md`). All four turned out to be normal Ubuntu behavior. One was because rkhunter doesn't read config files in `sshd_config.d/`, which is where I'd set `PermitRootLogin no`.
+**5. Added a rootkit scanner.** rkhunter now scans the server every day. The first scan gave me 4 warnings. I checked each one before ignoring it, and all 4 turned out to be normal Ubuntu files and settings.
 
-## Testing it from Kali
+**6. Checked again.** I ran Lynis one more time and the score went up to 72.
 
-I tried logging in as a user that doesn't exist, over and over. The first couple of tries got `Permission denied`. After that fail2ban banned Kali and the next attempts got `Connection refused`, so the firewall was dropping it completely. The ban output and logs are in `evidence/`.
-![fail2ban banning Kali](fail2ban-ban.png)
+## Attacking it from Kali
 
-![Firewall rule blocking Kali](firewall-ban.png)
+From Kali I kept trying to log in with a fake username. The first tries were denied. Then fail2ban blocked Kali, and after that the server would not even answer ("Connection refused").
+
+![fail2ban blocking Kali](screenshots/fail2ban-ban.png)
+
+![Firewall rule blocking Kali](screenshots/firewall-ban.png)
 
 ## Problems I ran into
 
-- When copying my SSH key to Ubuntu I kept typing my new key passphrase instead of my Ubuntu password. I only figured that out by reading `journalctl -u ssh`, which showed two failed passwords and then a timeout.
-- After installing fail2ban, the status command said it couldn't find the socket. I assumed the install broke, but the logs showed it had started fine. I'd just checked too quickly.
-- My first SSH login from the Mac got disconnected while I was checking the host key fingerprint. That was my own 30 second `LoginGraceTime` setting kicking in.
-- Mixed up a capital O and a zero in a `wget` flag. Small thing, cost me a few minutes.
+- When I was copying my SSH key to Ubuntu, I kept typing my key passphrase instead of my Ubuntu password. I found the problem by reading the SSH logs.
+- After I installed fail2ban, it looked like it wasn't working. The logs showed it was fine. I had just checked too fast.
+- My first SSH login from my Mac got cut off. It was my own 30 second login time limit.
+- I typed a zero instead of a capital O in a command and it failed. Small mistake, but it took a few minutes to find.
 
 ## Files
 
-- `configs/` has the SSH, fail2ban and rkhunter configs
-- `evidence/` has command output showing each piece working
-- `before-lynis-report.dat` and `evidence/after-lynis-report.dat` are the two audits
+- `configs/` has my settings for SSH, fail2ban and rkhunter
+- `evidence/` has the output that shows each part working, including the before and after Lynis reports
+- `screenshots/` has the images above
 
-## What I want to do next
+## What's next
 
-- Work through more of the Lynis suggestions and get the score higher
-- Write an Ansible playbook so I can apply all of this to a new server in one go
-- Send the logs to a SIEM instead of checking them by hand
+- Fix more of the Lynis suggestions to raise the score
+- Write a script that can set up all of this on a new server automatically
+- Send the server's logs to a monitoring tool so I don't have to check them by hand
